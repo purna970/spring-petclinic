@@ -1,5 +1,5 @@
 pipeline {
-    agent { 'ubuntu' }
+    agent { label 'ubuntu' }
     stages {
         stage('vcs') {
             steps {
@@ -9,7 +9,7 @@ pipeline {
         }
         stage('package') {
             steps {
-                sh 'mvn package'
+                sh './mvnw package'
             }
         }
     }
