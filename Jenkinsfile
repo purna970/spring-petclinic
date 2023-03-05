@@ -1,5 +1,11 @@
 pipeline {
     agent { label 'ubuntu' }
+    triggers { pollSCM('* * * * *') } 
+    parameters { choice(name: 'maven', choices: ['install', 'package', 'clean package'], description: 'maven packages') } 
+    tools {
+        maven 'Maven' 
+        JDK 'Java' 
+        }
     stages {
         stage('vcs') {
             steps {
@@ -9,7 +15,14 @@ pipeline {
         }
         stage('package') {
             steps {
-                sh './mvnw package'
+                sh "mvn ${params.package}"
+            }
+        }
+        stage {
+            steps {
+                archiveArtifacts artifacts: 'target/*.jar', 
+                onlyIfSuccessful: true 
+                junit testResults: '**/surefire-reports/TEST-*>xml'
             }
         }
     }
