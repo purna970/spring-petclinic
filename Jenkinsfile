@@ -1,10 +1,10 @@
 pipeline {
     agent { label 'ubuntu' }
     triggers { pollSCM('* * * * *') } 
-    parameters { choice(name: 'maven', choices: ['install', 'package', 'clean package'], description: 'maven packages') } 
+    parameters { choice(name: 'maven', choices: ['install', 'clean', 'package', 'clean package'], description: 'maven packages') } 
     tools {
-        maven 'Maven' 
-        JDK 'Java' 
+            maven 'Maven' 
+            jdk 'Java' 
         }
     stages {
         stage('vcs') {
@@ -15,14 +15,20 @@ pipeline {
         }
         stage('package') {
             steps {
-                sh "mvn ${params.package}"
+                sh "mvn package"
+            }
+        } 
+         stage('copy') {
+            steps {
+                sh "mkdir -p /tmp/archive/${JOB_NAME}/${BUILD_ID} && cp ./target/*.jar  /tmp/archive/${JOB_NAME}/${BUILD_ID}" 
+                sh "aws s3 sync /tmp/archive/${JOB_NAME}/${BUILD_ID} s3://praneethpoorna/ "
             }
         }
-        stage {
+        stage('archiveartifact') { 
             steps {
                 archiveArtifacts artifacts: 'target/*.jar', 
                 onlyIfSuccessful: true 
-                junit testResults: '**/surefire-reports/TEST-*>xml'
+                junit testResults: '**/surefire-reports/TEST-*.xml'
             }
         }
     }
