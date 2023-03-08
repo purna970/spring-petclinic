@@ -25,6 +25,12 @@ pipeline {
                 junit testResults: '**/surefire-reports/TEST-*.xml'
             }
         }
-         
+         stage('SonarQube analysis') {
+            steps('sonarqube') {
+             withSonarQubeEnv('sonar') {
+             sh 'mvn clean verify sonar:sonar -Dsonar.login=6644b59884112fd89115612a4189a34a70d66b78'
+    } // submitted SonarQube taskId is automatically attached to the pipeline context
+  }
+         }
     }
 } 
