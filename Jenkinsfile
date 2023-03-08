@@ -18,12 +18,6 @@ pipeline {
                 sh "mvn package"
             }
         } 
-         stage('copy') {
-            steps {
-                sh "mkdir -p /tmp/archive/${JOB_NAME}/${BUILD_ID} && cp ./target/*.jar  /tmp/archive/${JOB_NAME}/${BUILD_ID}" 
-                sh "aws s3 sync /tmp/archive/${JOB_NAME}/${BUILD_ID} s3://praneethpoorna/ "
-            }
-        }
         stage('archiveartifact') { 
             steps {
                 archiveArtifacts artifacts: 'target/*.jar', 
