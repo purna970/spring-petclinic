@@ -29,7 +29,7 @@ pipeline {
             steps {
                 rtServer (
                     id: "ARTIFACTORY_SERVER",
-                    url: 'https://poornaboda.jfrog.io/artifactory,'
+                    url: 'https://poornaboda.jfrog.io/artifactory',
                     credentialsId: 'Meenakshi'
                 )
 
