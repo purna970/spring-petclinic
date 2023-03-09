@@ -50,7 +50,7 @@ pipeline {
         }
 
         stage ('Exec Maven') { 
-            tasks {
+            tools {
                 jdk 'Java'
             }
             steps {
