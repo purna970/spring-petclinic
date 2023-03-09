@@ -74,7 +74,7 @@ pipeline {
         stage('SonarQube analysis') {
             steps('sonarqube') {
              withSonarQubeEnv('sonar') {
-             sh 'mvn clean verify sonar:sonar -Dsonar.login=6644b59884112fd89115612a4189a34a70d66b78 -Dsonar.organization=poorna -Dsonar.projectKey=poorna_my'9
+             sh 'mvn clean verify sonar:sonar -Dsonar.login=6644b59884112fd89115612a4189a34a70d66b78 -Dsonar.organization=poorna -Dsonar.projectKey=poorna_my'
     } // submitted SonarQube taskId is automatically attached to the pipeline context
   }
         }  
